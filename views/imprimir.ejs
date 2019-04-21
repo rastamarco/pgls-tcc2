@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Imprimir Resultados</title>
+</head>
+
+<body>
+    <br><br>
+    <h4 style="text-align: center"> Resultados Obtidos</h4>
+    <br>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>Indicador</td>
+                <td>Meta</td>
+                <td>Ação</td>
+                <td>Data de Apuração</td>
+                <td>Quantidade/Peso/Consumo</td>
+                <td>Empresa Responsável para Transporte</td>
+                <td>Empresa Responsável para Destino</td>
+                <td>Observações</td>
+            </tr>
+        </thead>
+        <tbody>
+            <td><%= newResultados.indicadores %></td>
+            <td><%= newResultados.meta %></td>
+            <td><%= newResultados.acao %></td>
+            <td><%= newResultados.data_apuracao %></td>
+            <td><%= newResultados.qtde_peso_consumo %></td>
+            <td><%= newResultados.empresas1 %></td>
+            <td><%= newResultados.empresas2 %></td>
+            <td><%= newResultados.obs %></td>
+        </tbody>
+    </table>
+    <form>
+        <button type="submit" class="btn btn-primary btn-block" onClick="window.print()""> Imprimir </button>
+    </form>
+</body>
+
+</html>

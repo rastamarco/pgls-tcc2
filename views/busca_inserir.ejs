@@ -1,0 +1,139 @@
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <ul class="navbar-nav">
+    <li class="nav-item active">
+      <a class="nav-link" href="/dashboard/busca_inserir">Buscas</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard">PGLS-UTFPR</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/resultados">Resultados</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/apuracoes">Apurações</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/admin">Painel do Adminstrador</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/busca_inserir">Buscar/Anexar</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/users/logout">Desconectar</a>
+    </li>
+  </ul>
+</nav>
+<% include ./partials/messages %>
+
+<h5 class="text-center mb-3" style="margin-top: 20px"> <a name="secao1">Buscas </a></h5>
+<hr>
+<div class="container" >
+  <div class="row">
+    <!-- Busca Empresas -->
+    <div class="col-lg-12" style="margin-top: 30px; margin-left: 10px">
+      <h4> Busca de Empresas </h4>
+      <form action="/dashboard/search" method="get">
+        <input type="name" name="busca_empresa" id="busca_empresa" />
+        <input type="submit" value="Procurar" />
+      </form>
+
+      <br>
+      <% if(results) {
+    console.log("Results ",results)
+   if(empresa.length > 0){
+      console.log("Empresa ",empresa) %>
+      <b>Resultados da pesquisa por <%= search %>:</b>
+      <br><br>
+      <ul>
+        <% empresa.forEach(function(item){ %>
+        <li><b>Razão Social:</b> <%= item.razao_social %></li>
+        <li><b>Nome Fantasia:</b> <%= item.nome_fantasia %></li>
+        <li><b>Tipo de Licença Ambiental:</b> <%= item.t_licensa_ambiental %></li>
+        <li><b>Número da Licença Ambiental:</b> <%= item.n_licensa_ambiental %></li>
+        <li><b>Validade da Licença Ambiental:</b> <%= item.v_licensa_ambiental %></li>
+        <li><b>Órgão expeditor da Licença Ambiental:</b> <%= item.o_licensa_ambiental %></li>
+        <li><b>Documento</b> <a href=<%= item.newpath %> </a> <%= item.newpath %> </li> <% }); %> </ul> <form
+            action="/dashboard/busca_inserir2" method="POST" enctype="multipart/form-data">
+            <div>
+              <label for="empresas_file">Insira um documento, caso exista</label><br>
+              <input type="file" name="empresasfile" /><br>
+              <label for="nome_empresa">**Não Altere o nome ao lado</label>
+              <input type="name" name="nome_empresa" value="<%= empresa[0].razao_social %>" /> <br>
+              <input type="submit" value="Submeter Arquivo" /><br><br><br><br>
+            </div>
+            </form>
+            <% } else{ %>
+            <b>Nenhum resultado encontrado...faça pesquisas pelo nome correto da empresa.</b>
+            <% } } %>
+    </div>
+
+    <!-- Busca Metas -->
+    <div class="col-lg-12" style="margin-top: 30px;margin-left: 10px">
+      <h4> Busca de Metas </h4>
+      <form action="/dashboard/searchMeta" method="get">
+        <input type="name" name="busca_meta" id="busca_meta" />
+        <input type="submit" value="Procurar" />
+      </form>
+
+      <br>
+      <% if(results2) {
+      console.log("Results ",results2)
+     if(meta.length > 0){
+        console.log("Meta ",meta) %>
+      <b>Resultados da pesquisa por <%= search %>:</b>
+      <br><br>
+      <ul>
+        <% meta.forEach(function(item){ %>
+        <li><b>Indicador: </b> <%= item.indicadores %></li>
+        <li><b>Meta: </b> <%= item.meta %></li>
+        <li><b>Data de Apuração Final:</b> <%= item.data_apuracao_final %></li>
+        <li><b>Documento</b> <a href=<%= item.documento %> </a> <%= item.documento %> </li> <% }); %> </ul> <form
+            action="/dashboard/busca_inserir3" method="POST" enctype="multipart/form-data">
+            <div>
+              <label for="metasfile">Insira um documento, caso exista</label><br>
+              <input type="file" name="metasfile" /><br>
+              <label for="meta">**Não Altere o nome ao lado</label>
+              <input type="name" name="meta" value="<%= meta[0].meta %>" /> <br>
+              <input type="submit" value="Submeter Arquivo" /><br><br><br><br>
+            </div>
+            </form>
+            <% } else{ %>
+            <b>Nenhum resultado encontrado...faça pesquisas pelo nome correto da Meta.</b>
+            <% } } %>
+    </div>
+
+    <!-- Busca Ações -->
+    <div class="col-lg-12" style="margin-top: 30px; margin-left: 10px">
+        <h4> Busca de Ações </h4>
+        <form action="/dashboard/searchAcao" method="get">
+          <input type="name" name="busca_acao" id="busca_acao" />
+          <input type="submit" value="Procurar" />
+        </form>
+  
+        <br>
+        <% if(results3) {
+        console.log("Results ",results3)
+       if(acoes.length > 0){
+          console.log("Ação ",acoes) %>
+        <b>Resultados da pesquisa por <%= search %>:</b>
+        <br><br>
+        <ul>
+          <% acoes.forEach(function(item){ %>
+          <li><b>Ação: </b> <%= item.acao %></li>
+          <li><b>Documento</b> <a href=<%= item.documento %> </a> <%= item.documento %> </li> <% }); %> </ul> <form
+              action="/dashboard/busca_inserir4" method="POST" enctype="multipart/form-data">
+              <div>
+                <label for="acoesfile">Insira um documento, caso exista</label><br>
+                <input type="file" name="acoesfile" /><br>
+                <label for="acao">**Não Altere o nome ao lado</label>
+                <input type="name" name="acao" value="<%= acoes[0].acao %>" /> <br>
+                <input type="submit" value="Submeter Arquivo" /><br><br><br><br>
+              </div>
+              </form>
+              <% } else{ %>
+              <b>Nenhum resultado encontrado...faça pesquisas pelo nome correto da Ação.</b>
+              <% } } %>
+      </div>
+
+  </div>
+</div>

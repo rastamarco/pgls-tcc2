@@ -1,0 +1,182 @@
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <ul class="navbar-nav">
+    <li class="nav-item active">
+      <a class="nav-link" href="/dashboard/resultados">Resultados</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard">PGLS-UTFPR</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/resultados">Resultados</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/apuracoes">Apurações</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/admin">Painel do Adminstrador</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/busca_inserir">Buscar/Anexar</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/users/logout">Desconectar</a>
+    </li>
+  </ul>
+</nav>
+<% include ./partials/messages %>
+<h5 class="text-center mb-3" style="margin-top: 20px"> Resultados </h5>
+<h5 class="text-center mb-3" style="margin-top: 20px"> Gerar Resultados</h5>
+<div class="row">
+  <!-- Gerar Resultados -->
+  <form action="/dashboard/resultados" target="_blank" method="POST">
+    <div class="col-lg" style="margin-top: 20px">
+      <label for="indicadores"> Selecione o Indicador</label>
+      <select name="indicadores" id="indicadores" class="custom-select">
+        <% for (var i = 0; i < indicador.length ;i++ ) {%>
+        <option value="<%= indicador[i].nome %>"> <%= indicador[i].nome %></option>
+        <% } %>
+      </select>
+      <label for="meta"> Selecione a Meta</label>
+      <select name="meta" id="metas" class="custom-select">
+        <option value="">Aguardando seleção de Indicador...</option>
+      </select>
+      <label for="acao"> Selecione a Ação</label>
+      <select name="acao" id="acao" class="custom-select">
+        <option value=""> Aguardando seleção de Meta...</option>
+      </select>
+      <br><br>
+      <div class="form-group" id="dataMeta">
+        <label for="data_apuracao" class="fas fa-thumbtack">Data de apuração Final</label>
+        <input type="name" id="data_apuracao" name="data_apuracao" class="form-control"
+        value="Aguardando seleção de Meta..." disabled/>
+      </div>
+      <div class="form-group" id="qtde">
+        <label for="qtde_peso_consumo" class="fas fa-thumbtack">Quantidade/Peso/Consumo Total</label>
+        <input type="name" id="qtde_peso_consumo" name="qtde_peso_consumo" class="form-control" value="Aguardando seleção de Ação..." disabled/>
+      </div>
+      <label for="empresas1"> Empresa Responsável pelo Transporte</label>
+      <select name="empresas1" id="empresas1" class="custom-select">
+        <% for (var i = 0; i < empresas.length ;i++ ) {%>
+        <option value="<%= empresas[i].razao_social %>"> <%= empresas[i].razao_social %></option>
+        <% } %>
+      </select>
+      <label for="empresas2"> Empresa Responsável pelo Destino</label>
+      <select name="empresas2" id="empresas2" class="custom-select">
+        <% for (var i = 0; i < empresas.length ;i++ ) {%>
+        <option value="<%= empresas[i].razao_social %>"> <%= empresas[i].razao_social %></option>
+        <% } %>
+      </select>
+      <div class="form-group">
+        <label for="obs" class="fas fa-thumbtack">Observações</label>
+        <input type="name" id="obs" name="obs" class="form-control" placeholder="Observações"
+          value="" />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block"> Gerar Resultado </button>
+  </form>
+  <br><br>
+</div>
+</div>
+
+<script>
+  document.getElementById("indicadores").addEventListener('change', (event) => {
+    $("#metas").find("option").remove();
+    let indicador_atual = event.target.value;
+    console.log(indicador_atual);
+    var len = parseInt("<%= JSON.stringify(metas.length) %>");
+    console.log(len);
+
+    var allMetas = { indicadores: [], meta: [], data_apuracao_final: [] };
+    "<% for (var i =0; i < metas.length ; i++ )  { %>"
+    allMetas.indicadores.push("<%= metas[i].indicadores %>"),
+      allMetas.meta.push("<%= metas[i].meta %>"),
+      allMetas.data_apuracao_final.push("<%= metas[i].data_apuracao_final %>")
+    "<% } %> "
+    console.log(allMetas);
+    var options = [];
+    for (var i = 0; i < len; i++) {
+      if (allMetas.indicadores[i] == indicador_atual) {
+        console.log(allMetas.meta[i]);
+        options.push(allMetas.meta[i]);
+      }
+    }
+    for (var i = 0; i < options.length; i++) {
+      // $("#metas1").find("option").remove();
+      $("#metas").append(`<option value="${options[i]}">${options[i]}</option>`);
+    }
+
+  });
+
+  document.getElementById("metas").addEventListener('change', (event) => {
+    $("#acao").find("option").remove();
+    $("#dataMeta").find("input").remove();
+    let meta_atual = event.target.value;
+    console.log(meta_atual);
+    var len = parseInt("<%= JSON.stringify(acao.length) %>");
+    console.log(len);
+    var data = "";
+
+    var allMetas = { data_apuracaofinal: [], meta: [] };
+    "<% for (var i=0;i < metas.length;i++ ) { %>"
+    allMetas.meta.push("<%= metas[i].meta %>"),
+    allMetas.data_apuracaofinal.push("<%= metas[i].data_apuracao_final %>")
+     "<% } %>"
+    var data = "";
+    for(var i=0; i< parseInt("<%= JSON.stringify(metas.length) %>"); i++ ) {
+      if(allMetas.meta[i] == meta_atual){
+        data = allMetas.data_apuracaofinal[i];
+      }
+    }
+    var allAcao = { acao: [], nomeFuncionario: [], metas: [] };
+    "<% for (var i =0; i < acao.length ; i++ )  { %>"
+    allAcao.acao.push("<%=acao[i].acao%>"),
+      allAcao.nomeFuncionario.push("<%= acao[i].nomeFuncionario %>"),
+      allAcao.metas.push("<%= acao[i].metas %>")
+    "<% } %> "
+    console.log(allAcao);
+    var options = [];
+    for (var i = 0; i < len; i++) {
+      if (allAcao.metas[i] == meta_atual) {
+        console.log(allAcao.acao[i]);
+        options.push(allAcao.acao[i]);
+      }
+    }
+    // console.log(options);
+    for (var i = 0; i < options.length; i++) {
+      // $("#metas1").find("option").remove();
+      $("#acao").append(`<option value="${options[i]}">${options[i]}</option>`);
+    }
+    var newElement = `<input type="date" id="data_apuracao" name="data_apuracao" class="form-control" value='${data}'>`
+    $( "#dataMeta" ).append( $(newElement) );
+
+  });
+
+  document.getElementById("acao").addEventListener('change', (event) => {
+    $("#qtde").find("input").remove();
+    let acao_atual = event.target.value;
+    console.log(acao_atual);
+    var len = parseInt("<%= JSON.stringify(apuracao.length) %>");
+    console.log(len);
+
+    var allApuracoes = { acao: [], qtde_peso_consumo: [] };
+
+    "<% for (var i =0; i < apuracao.length ; i++ )  { %>"
+    allApuracoes.acao.push("<%=apuracao[i].acao%>"),
+    allApuracoes.qtde_peso_consumo.push("<%= apuracao[i].qtde_peso_consumo %>")
+    "<% } %> "
+    console.log(allApuracoes);
+    var options = [];
+    var total = 0;
+    for (var i = 0; i < len; i++) {
+      if (allApuracoes.acao[i] == acao_atual) {
+        console.log(allApuracoes.qtde_peso_consumo[i]);
+        options.push(allApuracoes.qtde_peso_consumo[i]);
+        total = total + parseInt(allApuracoes.qtde_peso_consumo[i]);
+      }
+    }
+    console.log("Total: ", total);
+    var newElement = `<input type="number" name="qtde_peso_consumo" id="qtde_peso_consumo" class="form-control" value='${total}'>`
+    $( "#qtde" ).append( $(newElement) );
+  });
+
+</script>
