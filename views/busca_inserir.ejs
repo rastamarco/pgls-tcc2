@@ -74,7 +74,6 @@
         <input type="name" name="busca_meta" id="busca_meta" />
         <input type="submit" value="Procurar" />
       </form>
-
       <br>
       <% if(results2) {
       console.log("Results ",results2)
@@ -87,7 +86,7 @@
         <li><b>Indicador: </b> <%= item.indicadores %></li>
         <li><b>Meta: </b> <%= item.meta %></li>
         <li><b>Data de Apuração Final:</b> <%= item.data_apuracao_final %></li>
-        <li><b>Documento</b> <a href=<%= item.documento %> </a> <%= item.documento %> </li> <% }); %> </ul> <form
+        <li><b>Documento</b> <a href=<%= item.documento %>  <%= item.documento %> </a></li> <% }); %> </ul> <form
             action="/dashboard/busca_inserir3" method="POST" enctype="multipart/form-data">
             <div>
               <label for="metasfile">Insira um documento, caso exista</label><br>
