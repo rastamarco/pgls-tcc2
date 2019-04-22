@@ -261,7 +261,7 @@ router.post('/admin4', (req, res) => {
 
     const { metas, acao } = req.body;
     let errors = [];
-    if (!metas || !data_apuracao_final) {
+    if (!metas || !acao) {
         errors.push({ msg: 'Por favor preencha todos os campos' });
     }
     if (errors.length > 0) {
