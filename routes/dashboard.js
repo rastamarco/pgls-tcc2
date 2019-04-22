@@ -145,7 +145,7 @@ router.post('/admin2', (req, res) => {
 router.post('/adminEmpresa', function (req, res, next) {
     const { razao_social, nome_fantasia, t_licensa_ambiental, n_licensa_ambiental,
         v_licensa_ambiental, o_licensa_ambiental } = req.body;
-
+    let errors = [];
     if (!razao_social || !nome_fantasia || !t_licensa_ambiental || !n_licensa_ambiental || !v_licensa_ambiental || !o_licensa_ambiental) {
         errors.push({ msg: 'Por favor preencha todos os campos' });
     }
@@ -227,6 +227,7 @@ router.post('/admin0', (req, res) => {
 router.post('/admin3', (req, res) => {
 
     const { indicadores, meta, data_apuracao_final } = req.body;
+    let errors = [];
     if (!indicadores || !meta || !data_apuracao_final) {
         errors.push({ msg: 'Por favor preencha todos os campos' });
     }
@@ -259,33 +260,40 @@ router.post('/admin3', (req, res) => {
 router.post('/admin4', (req, res) => {
 
     const { metas, acao } = req.body;
-
-    Acao.findOne({ metas: metas, acao: acao }).then(acoes => {
-        if (acoes) {
-            req.flash('error_msg', 'Já possui essa ação!');
-            res.redirect('/dashboard/admin');
-        } else {
-            const newAcao = new Acao({
-                metas,
-                acao,
-            });
-            const newAcoes = new Acoes({
-                acao
-            });
-            //  console.log(newAcao);
-            //console.log(newAcoes);
-            newAcao.save().then(acao => {
-                newAcoes.save().then(acoes => {
-                    req.flash('success_msg', 'Ação inserida com sucesso!');
-                    res.redirect('/dashboard/admin');
+    let errors = [];
+    if (!metas || !data_apuracao_final) {
+        errors.push({ msg: 'Por favor preencha todos os campos' });
+    }
+    if (errors.length > 0) {
+        req.flash('error_msg', 'Preencha corretamente');
+        res.redirect("/dashboard/admin");
+    } else {
+        Acao.findOne({ metas: metas, acao: acao }).then(acoes => {
+            if (acoes) {
+                req.flash('error_msg', 'Já possui essa ação!');
+                res.redirect('/dashboard/admin');
+            } else {
+                const newAcao = new Acao({
+                    metas,
+                    acao,
+                });
+                const newAcoes = new Acoes({
+                    acao
+                });
+                //  console.log(newAcao);
+                //console.log(newAcoes);
+                newAcao.save().then(acao => {
+                    newAcoes.save().then(acoes => {
+                        req.flash('success_msg', 'Ação inserida com sucesso!');
+                        res.redirect('/dashboard/admin');
+                    })
+                        .catch(err => console.log(err));
                 })
                     .catch(err => console.log(err));
-            })
-                .catch(err => console.log(err));
 
-        }
-    });
-
+            }
+        });
+    }
 });
 
 /////////////////////////////// Fim Painel Dados PGLS ///////////////////////////////////
@@ -371,13 +379,13 @@ router.get('/adminDetalhes', (req, res) => {
 // Fazer Apuração
 router.post('/apuracoes', (req, res) => {
     const { indicadores, meta, acao, data_apuracao, qtde_peso_consumo, nomeFuncionario } = req.body;
-
+    let errors = [];
     if (!indicadores || !meta || !acao || !data_apuracao || !qtde_peso_consumo || !nomeFuncionario) {
         errors.push({ msg: 'Por favor preencha todos os campos' });
     }
     if (errors.length > 0) {
         req.flash('error_msg', 'Preencha corretamente');
-        res.redirect("/dashboard/admin");
+        res.redirect("/dashboard/apuracoes");
     } else {
 
 
@@ -415,16 +423,14 @@ router.post('/apuracoes', (req, res) => {
 router.post('/resultados', (req, res) => {
     const { indicadores, meta, acao, data_apuracao, qtde_peso_consumo, empresas1, empresas2, obs } = req.body;
     console.log(qtde_peso_consumo);
-
-
+    let errors = [];
     if (!indicadores || !meta || !acao || !data_apuracao || !qtde_peso_consumo || !empresas1 || !empresas2) {
         errors.push({ msg: 'Por favor preencha todos os campos' });
     }
     if (errors.length > 0) {
         req.flash('error_msg', 'Preencha corretamente');
-        res.redirect("/dashboard/admin");
+        res.redirect("/dashboard/resultados");
     } else {
-
         Resultados.findOne({ acao: acao, data_apuracao: data_apuracao })
             .then(apuracoes => {
                 if (apuracoes) {
