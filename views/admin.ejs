@@ -255,17 +255,7 @@
     </div>
     <!-- Detalhes das Ações-->
     <div class="col-lg" style="margin-top: 20px">
-      <h5 class="text-center mb-3"><i class="fab fa-buffer"></i> Listar Detalhes das Ações </h5>
-      <form action="/dashboard/adminDetalhes" method="GET">
-        <label for="acoes"> Selecione a Ação</label>
-        <select name="acoes" id="acoes1" class="custom-select">
-          <% for (var i = 0; i < acoes.length ;i++ ) {%>
-          <option value="<%= acoes[i].acao %>"> <%= acoes[i].acao %></option>
-          <% } %>
-        </select>
-        <br>
-        <!-- <button type="submit" class="btn btn-primary btn-block"> Ver Detalhes</button> -->
-        <!-- Tabela de Resultados-->
+      <h5 class="text-center mb-3"><i class="fab fa-buffer"></i> Lista de Funcionários em Ações </h5>
         <br>
         <table class="table table-striped">
             <tr>
@@ -275,7 +265,7 @@
               <td id="nomefuncionarioacao">Nome do Funcionário</td>
             </tr>
         </table>
-      </form>
+
     </div>
     <br><br>
   </div>
@@ -326,7 +316,7 @@
     }
   });
 
-  document.getElementById("acoes1").addEventListener('change', (event) => {
+  document.getElementById("acoes2").addEventListener('change', (event) => {
     $("#nomefuncionarioacao").find("td").remove();
     let acao_atual = event.target.value;
     console.log(acao_atual);
@@ -365,7 +355,6 @@
       $("#nomefuncionarioacao").append(`<td value="${options[i]}">${options[i]}</td>`);
     }
   });
-
 
   document.getElementById("indicadores10").addEventListener('change', (event) => {
     $("#metas2").find("option").remove();
