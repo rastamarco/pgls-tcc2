@@ -528,7 +528,7 @@ router.post('/busca_inserir2', function (req, res, next) {
         });
     } else {
         req.flash('error_msg', 'Ocorreu algun erro! Verifique o tipo de arquivo enviado');
-        es.redirect("/dashboard/busca_inserir");
+        res.redirect("/dashboard/busca_inserir");
     }
 
 });
@@ -579,7 +579,7 @@ router.post('/busca_inserir3', function (req, res, next) {
         });
     } else {
         req.flash('error_msg', 'Ocorreu algun erro! Verifique o tipo de arquivo enviado');
-        es.redirect("/dashboard/busca_inserir");
+        res.redirect("/dashboard/busca_inserir");
     }
 
 });
@@ -630,10 +630,153 @@ router.post('/busca_inserir4', function (req, res, next) {
         });
     } else {
         req.flash('error_msg', 'Ocorreu algun erro! Verifique o tipo de arquivo enviado');
-        es.redirect("/dashboard/busca_inserir");
+        res.redirect("/dashboard/busca_inserir");
     }
 
 });
 
 
-module.exports = router;
+//////////////////////////   Deletar e Atualizar //////////////////////////////////
+
+
+router.post('/deleteEmpresa', function (req, res, next) {
+    console.log("Nome Empresa: ", req.body.delete);
+    const nomeEmpresa = req.body.delete;
+    Empresas.findOne({ razao_social: nomeEmpresa }).then(empresa => {
+        const eid = empresa._id;
+        Empresas.deleteOne({ _id: eid }, (err, result) => {
+            if (err) {
+                console.log(err);
+                req.flash('error_msg', 'Ocorreu algum erro ao deletar.');
+                res.redirect("/dashboard/busca_inserir");
+            } else {
+                console.log(result);
+                req.flash('success_msg', 'Empresa Deleta com Sucesso!');
+                res.redirect("/dashboard/busca_inserir");
+            }
+        });
+    });
+});
+
+
+
+router.post('/updateEmpresa', function (req, res, next) {
+    console.log("Nome Empresa: ", req.body.razao);
+    const razao = req.body.razao;
+    const fantasia = req.body.fantasia;
+    const tipo = req.body.tipo;
+    const numero = req.body.numero;
+    const validade = req.body.validade;
+    const orgao = req.body.orgao;
+    Empresas.findOne({ razao_social: razao }).then(empresa => {
+        const eid = empresa._id;
+        console.log("Id Empresa: ", eid);
+        Empresas.update({ _id: eid }, {
+            razao_social: razao,
+            nome_fantasia: fantasia,
+            t_licensa_ambiental: tipo,
+            n_licensa_ambiental: numero,
+            v_licensa_ambiental: validade,
+            o_licensa_ambiental: orgao
+        }, function (err, result) {
+            if (err) {
+                console.log(err);
+                req.flash('error_msg', 'Ocorreu algum erro ao deletar.');
+                res.redirect("/dashboard/busca_inserir");
+            }
+            else {
+                console.log(result);
+                req.flash('success_msg', 'Dados da Empresa foram Atualizados com Sucesso');
+                res.redirect("/dashboard/busca_inserir");
+            }
+        });
+    });
+});
+
+
+router.post('/deletarMeta', function (req, res, next) {
+    console.log("Nome Meta: ", req.body.deletarMeta);
+    const nomeMeta = req.body.deletarMeta;
+    Metas.findOne({ meta: nomeMeta }).then(meta => {
+        const mid = meta._id;
+        Metas.deleteOne({ _id: mid }, (err, result) => {
+            if (err) {
+                console.log(err);
+                req.flash('error_msg', 'Ocorreu algum erro ao deletar.');
+                res.redirect("/dashboard/busca_inserir");
+            } else {
+                console.log(result);
+                req.flash('success_msg', 'Meta Deletada Com Sucesso!');
+                res.redirect("/dashboard/busca_inserir");
+            }
+        });
+    });
+});
+
+router.post('/updateMeta', function (req, res, next) {
+    console.log("Nome Meta: ", req.body.upMeta);
+    const meta = req.body.upMeta;
+    const data = req.body.dataApuracaoFinal;
+    Metas.findOne({ meta: meta }).then(metass => {
+        const mid = metass._id;
+        console.log("Id Meta: ", mid);
+        Metas.update({ _id: mid }, {
+            meta: meta,
+            data_apuracao_final: data
+        }, function (err, result) {
+            if (err) {
+                console.log(err);
+                req.flash('error_msg', 'Ocorreu algum erro ao deletar.');
+                res.redirect("/dashboard/busca_inserir");
+            }
+            else {
+                console.log(result);
+                req.flash('success_msg', 'Meta Atualizados com Sucesso');
+                res.redirect("/dashboard/busca_inserir");
+            }
+        });
+    });
+});
+
+router.post('/deletarAcao', function (req, res, next) {
+    console.log("Nome Acao: ", req.body.deletarAcao);
+    const nomeAcao = req.body.deletarAcao;
+    Acoes.findOne({ acao: nomeAcao }).then(acao => {
+        const aid = acao._id;
+        Acoes.deleteOne({ _id: aid }, (err, result) => {
+            if (err) {
+                console.log(err);
+                req.flash('error_msg', 'Ocorreu algum erro ao deletar.');
+                res.redirect("/dashboard/busca_inserir");
+            } else {
+                console.log(result);
+                req.flash('success_msg', 'Ação Deletada Com Sucesso!');
+                res.redirect("/dashboard/busca_inserir");
+            }
+        });
+    });
+});
+
+router.post('/updateAcao', function (req, res, next) {
+    console.log("Nome Acao: ", req.body.upAcao);
+    const acao = req.body.upAcao;
+    Acoes.findOne({ acao: acao }).then(acoess => {
+        const acid = acoess._id;
+        console.log("Id Acao: ", acid);
+        Acoes.update({ _id: acid }, {
+            acao: acao,
+        }, function (err, result) {
+            if (err) {
+                console.log(err);
+                req.flash('error_msg', 'Ocorreu algum erro ao deletar.');
+                res.redirect("/dashboard/busca_inserir");
+            }
+            else {
+                console.log(result);
+                req.flash('success_msg', 'Ação Atualizados com Sucesso!');
+                res.redirect("/dashboard/busca_inserir");
+            }
+        });
+    });
+});
+    module.exports = router;

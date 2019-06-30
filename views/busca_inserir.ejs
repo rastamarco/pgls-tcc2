@@ -25,9 +25,9 @@
 </nav>
 <% include ./partials/messages %>
 
-<h5 class="text-center mb-3" style="margin-top: 20px"> <a name="secao1">Buscas </a></h5>
+<h5 class="text-center mb-3" style="margin-top: 20px"> <a name="secao1">Buscar, Deletar e Atualizar Dados </a></h5>
 <hr>
-<div class="container" >
+<div class="container">
   <div class="row">
     <!-- Busca Empresas -->
     <div class="col-lg-12" style="margin-top: 30px; margin-left: 10px">
@@ -52,16 +52,46 @@
         <li><b>Número da Licença Ambiental:</b> <%= item.n_licensa_ambiental %></li>
         <li><b>Validade da Licença Ambiental:</b> <%= item.v_licensa_ambiental %></li>
         <li><b>Órgão expeditor da Licença Ambiental:</b> <%= item.o_licensa_ambiental %></li>
-        <li><b>Documento</b> <a href=<%= item.newpath %> </a> <%= item.newpath %> </li> <% }); %> </ul> <form
-            action="/dashboard/busca_inserir2" method="POST" enctype="multipart/form-data">
+        <li><b>Documento</b> <a href=<%= item.newpath %>> <%= item.newpath %> </a> </li> <% }); %> </ul> 
+        <form action="/dashboard/busca_inserir2" method="POST" enctype="multipart/form-data">
             <div>
               <label for="empresas_file">Insira um documento, caso exista</label><br>
               <input type="file" name="empresasfile" /><br>
               <label for="nome_empresa">**Não Altere o nome ao lado</label>
               <input type="name" name="nome_empresa" value="<%= empresa[0].razao_social %>" /> <br>
-              <input type="submit" value="Submeter Arquivo" /><br><br><br><br>
+              <input type="submit" value="Submeter Arquivo" /><br><br>
             </div>
             </form>
+            <hr>
+            <h5>Deletar</h5>
+            <form action="/dashboard/deleteEmpresa" method="POST" enctype="application/x-www-form-urlencoded">
+              <div>
+                <label for="delete">Deseja deletar essa Empresa ?</label><br>
+                <input type="name" name="delete" value="<%= empresa[0].razao_social %>" /><br>
+                <input type="submit" value="Deletar" />
+              </div>
+            </form>
+            <hr>
+            <hr>
+            <h5>Atualizar Dados</h5>
+            <form action="/dashboard/updateEmpresa" method="POST" enctype="application/x-www-form-urlencoded">
+              <div>
+                <label for="razao">Razão Social</label><br>
+                <input type="name" name="razao" value="<%= empresa[0].razao_social %>" /><br>
+                <label for="fantasia">Nome Fantasia</label><br>
+                <input type="name" name="fantasia" value="<%= empresa[0].nome_fantasia %>" /><br>
+                <label for="tipo">Tipo de Licença Ambiental</label><br>
+                <input type="name" name="tipo" value="<%= empresa[0].t_licensa_ambiental %>" /><br>
+                <label for="numero">Número da Licença Ambiental</label><br>
+                <input type="number" name="numero" value="<%= empresa[0].n_licensa_ambiental %>" /><br>
+                <label for="validade">Validade da Licença Ambiental</label><br>
+                <input type="date" name="validade" value="<%= empresa[0].v_licensa_ambiental %>" /><br>
+                <label for="orgao">Orgão Expeditor da Licença Ambiental</label><br>
+                <input type="name" name="orgao" value="<%= empresa[0].o_licensa_ambiental %>" /><br>
+                <input type="submit" value="Alterar Dados" />
+              </div>
+            </form>
+            <hr>
             <% } else{ %>
             <b>Nenhum resultado encontrado...faça pesquisas pelo nome correto da empresa.</b>
             <% } } %>
@@ -86,15 +116,35 @@
         <li><b>Indicador: </b> <%= item.indicadores %></li>
         <li><b>Meta: </b> <%= item.meta %></li>
         <li><b>Data de Apuração Final:</b> <%= item.data_apuracao_final %></li>
-        <li><b>Documento</b> <a href=<%= item.documento %>  <%= item.documento %> </a></li> <% }); %> </ul> <form
+        <li><b>Documento</b> <a href=<%= item.documento %>> <%= item.documento %> </a> </li> <% }); %> </ul> <form
             action="/dashboard/busca_inserir3" method="POST" enctype="multipart/form-data">
             <div>
               <label for="metasfile">Insira um documento, caso exista</label><br>
               <input type="file" name="metasfile" /><br>
               <label for="meta">**Não Altere o nome ao lado</label>
               <input type="name" name="meta" value="<%= meta[0].meta %>" /> <br>
-              <input type="submit" value="Submeter Arquivo" /><br><br><br><br>
+              <input type="submit" value="Submeter Arquivo" /><br><br>
             </div>
+            </form>
+            <hr>
+            <h5>Deletar Meta</h5>
+            <form action="/dashboard/deleteMeta" method="POST" enctype="application/x-www-form-urlencoded">
+              <div>
+                <label for="deletarMeta">Deseja deletar essa Meta ?</label><br>
+                <input type="name" name="deletarMeta" value="<%= meta[0].meta %>" /><br>
+                <input type="submit" value="Deletar" />
+              </div>
+            </form>
+            <hr>
+            <h5>Atualizar Dados</h5>
+            <form action="/dashboard/updateMeta" method="POST" enctype="application/x-www-form-urlencoded">
+              <div>
+                <label for="meta">Meta</label><br>
+                <input type="name" name="upMeta" value="<%= meta[0].meta %>" /><br>
+                <label for="dataApuracaoFinal">Data de Apuração Final</label><br>
+                <input type="date" name="dataApuracaoFinal" value="<%= meta[0].data_apuracao_final %>" /><br>
+                <input type="submit" value="Alterar Dados" />
+              </div>
             </form>
             <% } else{ %>
             <b>Nenhum resultado encontrado...faça pesquisas pelo nome correto da Meta.</b>
@@ -103,36 +153,54 @@
 
     <!-- Busca Ações -->
     <div class="col-lg-12" style="margin-top: 30px; margin-left: 10px">
-        <h4> Busca de Ações </h4>
-        <form action="/dashboard/searchAcao" method="get">
-          <input type="name" name="busca_acao" id="busca_acao" />
-          <input type="submit" value="Procurar" />
-        </form>
-  
-        <br>
-        <% if(results3) {
+      <h4> Busca de Ações </h4>
+      <form action="/dashboard/searchAcao" method="get">
+        <input type="name" name="busca_acao" id="busca_acao" />
+        <input type="submit" value="Procurar" />
+      </form>
+
+      <br>
+      <% if(results3) {
         console.log("Results ",results3)
        if(acoes.length > 0){
           console.log("Ação ",acoes) %>
-        <b>Resultados da pesquisa por <%= search %>:</b>
-        <br><br>
-        <ul>
-          <% acoes.forEach(function(item){ %>
-          <li><b>Ação: </b> <%= item.acao %></li>
-          <li><b>Documento</b> <a href=<%= item.documento %> </a> <%= item.documento %> </li> <% }); %> </ul> <form
-              action="/dashboard/busca_inserir4" method="POST" enctype="multipart/form-data">
+      <b>Resultados da pesquisa por <%= search %>:</b>
+      <br><br>
+      <ul>
+        <% acoes.forEach(function(item){ %>
+        <li><b>Ação: </b> <%= item.acao %></li>
+        <li><b>Documento</b> <a href=<%= item.documento %>><%= item.documento %> </a>  </li> <% }); %> </ul> <form
+            action="/dashboard/busca_inserir4" method="POST" enctype="multipart/form-data">
+            <div>
+              <label for="acoesfile">Insira um documento, caso exista</label><br>
+              <input type="file" name="acoesfile" /><br>
+              <label for="acao">**Não Altere o nome ao lado</label>
+              <input type="name" name="acao" value="<%= acoes[0].acao %>" /> <br>
+              <input type="submit" value="Submeter Arquivo" /><br><br>
+            </div>
+            </form>
+            <hr>
+            <h5>Deletar Ação</h5>
+            <form action="/dashboard/deleteAcao" method="POST" enctype="application/x-www-form-urlencoded">
               <div>
-                <label for="acoesfile">Insira um documento, caso exista</label><br>
-                <input type="file" name="acoesfile" /><br>
-                <label for="acao">**Não Altere o nome ao lado</label>
-                <input type="name" name="acao" value="<%= acoes[0].acao %>" /> <br>
-                <input type="submit" value="Submeter Arquivo" /><br><br><br><br>
+                <label for="deletarAcao">Deseja deletar essa Ação?</label><br>
+                <input type="name" name="deletarAcao" value="<%= acoes[0].acao %>" /><br>
+                <input type="submit" value="Deletar" />
               </div>
-              </form>
-              <% } else{ %>
-              <b>Nenhum resultado encontrado...faça pesquisas pelo nome correto da Ação.</b>
-              <% } } %>
-      </div>
+            </form>
+            <hr>
+            <h5>Atualizar Dados</h5>
+            <form action="/dashboard/updateAcao" method="POST" enctype="application/x-www-form-urlencoded">
+              <div>
+                <label for="upAcao">Ação</label><br>
+                <input type="name" name="upAcao" value="<%= acoes[0].acao %>" /><br>
+                <input type="submit" value="Alterar Dados" />
+              </div>
+            </form>
+            <% } else{ %>
+            <b>Nenhum resultado encontrado...faça pesquisas pelo nome correto da Ação.</b>
+            <% } } %>
+    </div>
 
   </div>
 </div>

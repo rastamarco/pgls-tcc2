@@ -198,7 +198,7 @@
 
         <label for="metas"> Selecione a Meta</label>
         <select name="metas" id="metas1" class="custom-select">
-          <option value="">Aguardando seleção de meta...</option>
+          <option value="">Aguardando seleção de Indicador...</option>
         </select>
         <br>
         <br>
@@ -223,11 +223,21 @@
     <div class="col-lg" style="margin-top: 20px">
       <h5 class="text-center mb-3"><i class="fab fa-buffer"></i> Inserir Funcionários nas Ações </h5>
       <form action="/dashboard/adminFuncionario" method="POST">
-        <label for="acoes"> Selecione a Ação</label>
-        <select name="acoes" id="acoes" class="custom-select">
-          <% for (var i = 0; i < acoes.length ;i++ ) {%>
-          <option value="<%= acoes[i].acao %>"> <%= acoes[i].acao %></option>
+
+        <label for="indicadores10"> Selecione o Indicador</label>
+        <select name="indicadores10" id="indicadores10" class="custom-select">
+          <% for (var i = 0; i < indicador.length ;i++ ) {%>
+          <option value="<%= indicador[i].nome %>"> <%= indicador[i].nome %></option>
           <% } %>
+        </select>
+        <label for="metas2"> Selecione a Meta</label>
+        <select name="metas" id="metas2" class="custom-select">
+          <option value="">Aguardando seleção de Indicador...</option>
+        </select>
+
+        <label for="acoes2"> Selecione a Ação</label>
+        <select name="acoes" id="acoes2" class="custom-select">
+          <option value="">Aguardando seleção de Meta...</option>
         </select>
         <br><br>
         <label for="nomeFuncionario"> Selecione o funcionário</label>
@@ -356,4 +366,62 @@
     }
   });
 
+
+  document.getElementById("indicadores10").addEventListener('change', (event) => {
+    $("#metas2").find("option").remove();
+    let indicador_atual = event.target.value;
+    console.log(indicador_atual);
+    var len = parseInt("<%= JSON.stringify(metas.length) %>");
+    console.log(len);
+
+    var allMetas = { indicadores: [], meta: [], data_apuracao_final: [] };
+    "<% for (var i =0; i < metas.length ; i++ )  { %>"
+    allMetas.indicadores.push("<%= metas[i].indicadores %>"),
+      allMetas.meta.push("<%= metas[i].meta %>"),
+      allMetas.data_apuracao_final.push("<%= metas[i].data_apuracao_final %>")
+    "<% } %> "
+    console.log(allMetas);
+
+    var options = [];
+    for (var i = 0; i < len; i++) {
+      if (allMetas.indicadores[i] == indicador_atual) {
+        console.log(allMetas.meta[i]);
+        options.push(allMetas.meta[i]);
+      }
+    }
+    for (var i = 0; i < options.length; i++) {
+      $("#metas2").append(`<option value="${options[i]}">${options[i]}</option>`);
+    }
+  });
+
+  document.getElementById("metas2").addEventListener('change', (event) => {
+    $("#acoes2").find("option").remove();
+    let meta_atual = event.target.value;
+    console.log(meta_atual);
+    var len = parseInt("<%= JSON.stringify(acao.length) %>");
+    console.log(len);
+
+    var allAcao = { acao: [], nomeFuncionario: [], metas: [] };
+
+    "<% for (var i =0; i < acao.length ; i++ )  { %>"
+    allAcao.acao.push("<%=acao[i].acao%>"),
+      allAcao.nomeFuncionario.push("<%= acao[i].nomeFuncionario %>"),
+      allAcao.acao.push("<%= acao[i].acao %>")
+      allAcao.metas.push("<%= acao[i].metas %>");
+    "<% } %> "
+    console.log(allAcao);
+    var options = [];
+    for (var i = 0; i < len; i++) {
+      if (allAcao.metas[i] == meta_atual) {
+        console.log(allAcao.acao[i]);
+        options.push(allAcao.acao[i]);
+      }
+    }
+    // console.log(options);
+    for (var i = 0; i < options.length; i++) {
+      // $("#metas1").find("option").remove();
+      $("#acoes2").append(`<option value="${options[i]}">${options[i]}</option>`);
+    }
+  });
 </script>
+
